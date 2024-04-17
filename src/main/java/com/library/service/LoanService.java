@@ -1,5 +1,7 @@
+/**
+ * Service class for managing loans.
+ */
 package com.library.service;
-
 
 import com.library.dto.LoanDTO;
 import com.library.entities.Book;
@@ -19,8 +21,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Service class for performing operations related to loans.
+ */
 @Service
 public class LoanService {
+
     private final LoanRepository loanRepository;
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
@@ -32,6 +38,16 @@ public class LoanService {
         this.userRepository = userRepository;
     }
 
+    /**
+     * Loans a book to a user.
+     *
+     * @param loan The loan object containing information about the book and user.
+     * @return The loan object after it has been saved.
+     * @throws ElementNotFoundException if the book or user is not found.
+     * @throws InvalidBookDataException if the book information in the loan request does not match the book in the database.
+     * @throws RegistrationException if the user in the loan request does not match the user in the database.
+     * @throws IllegalStateException if there are no available copies of the book.
+     */
     public Loan loanBook(Loan loan) {
         Book bookFromRequest = loan.getBook();
         User userFromRequest = loan.getUser();
@@ -64,6 +80,13 @@ public class LoanService {
         return loanRepository.save(loan);
     }
 
+    /**
+     * Returns a book that was previously loaned.
+     *
+     * @param id The ID of the loan to return.
+     * @return The loan object after it has been updated.
+     * @throws ElementNotFoundException if the loan is not found.
+     */
     public Loan returnBook(Integer id) {
         Loan loan = loanRepository.findById(id)
                 .orElseThrow(() -> new ElementNotFoundException("Loan not found"));
@@ -79,6 +102,13 @@ public class LoanService {
         return loanRepository.save(loan);
     }
 
+    /**
+     * Retrieves all loans of a user.
+     *
+     * @param username The username of the user.
+     * @return A list of LoanDTO objects representing the loans of the user.
+     * @throws ElementNotFoundException if no loans are found for the user.
+     */
     public List<LoanDTO> getLoansOfUser(String username) {
         List<Loan> loans = loanRepository.findByUserUsername(username);
 
@@ -87,11 +117,22 @@ public class LoanService {
         return loans.stream().map(this::toDTO).collect(Collectors.toList());
     }
 
+    /**
+     * Retrieves all loans.
+     *
+     * @return A list of LoanDTO objects representing all loans.
+     */
     public List<LoanDTO> getAllLoans() {
-        List<Loan> loans = loanRepository.findAll(); 
+        List<Loan> loans = loanRepository.findAll();
         return loans.stream().map(this::toDTO).collect(Collectors.toList());
     }
 
+    /**
+     * Converts a Loan entity to a LoanDTO object.
+     *
+     * @param loan The Loan entity to convert.
+     * @return A LoanDTO object representing the Loan entity.
+     */
     public LoanDTO toDTO(Loan loan) {
         LoanDTO loanDTO = new LoanDTO();
         loanDTO.setId(loan.getId());

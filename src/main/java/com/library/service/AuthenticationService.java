@@ -1,3 +1,6 @@
+/**
+ * Service class for user authentication and registration.
+ */
 package com.library.service;
 
 import com.library.exceptions.ElementAlreadyExistsException;
@@ -10,6 +13,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service class for managing user authentication and registration.
+ */
 @Service
 public class AuthenticationService {
 
@@ -25,6 +31,13 @@ public class AuthenticationService {
         this.authenticationManager = authenticationManager;
     }
 
+    /**
+     * Registers a new user.
+     *
+     * @param request The user registration request.
+     * @return An AuthenticationResponse containing the authentication token.
+     * @throws ElementAlreadyExistsException if a user with the same username already exists.
+     */
     public AuthenticationResponse register(User request) {
         if (userRepository.findByUsername(request.getUsername()).isPresent())
             throw new ElementAlreadyExistsException("User already exists");
@@ -37,16 +50,27 @@ public class AuthenticationService {
         return new AuthenticationResponse(token);
     }
 
+    /**
+     * Validates user registration data.
+     *
+     * @param request The user registration request to validate.
+     */
     private void validateRegistration(User request) {
         DataValidation.validateUser(request);
     }
 
+    /**
+     * Authenticates a user.
+     *
+     * @param request The user authentication request.
+     * @return An AuthenticationResponse containing the authentication token.
+     */
     public AuthenticationResponse authenticate(User request) {
         authenticationManager.authenticate(
-                        new UsernamePasswordAuthenticationToken(
-                            request.getUsername(),
-                            request.getPassword()
-                        )
+                new UsernamePasswordAuthenticationToken(
+                        request.getUsername(),
+                        request.getPassword()
+                )
         );
 
         User user = userRepository.findByUsername(request.getUsername()).orElseThrow();
@@ -55,4 +79,3 @@ public class AuthenticationService {
         return new AuthenticationResponse(token);
     }
 }
-

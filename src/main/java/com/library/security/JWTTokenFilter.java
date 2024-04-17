@@ -17,6 +17,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+/**
+ * Filter class to intercept and validate JWT tokens in incoming requests.
+ */
 @Component
 public class JWTTokenFilter extends OncePerRequestFilter {
 
@@ -28,6 +31,15 @@ public class JWTTokenFilter extends OncePerRequestFilter {
         this.userDetailsService = userDetailsService;
     }
 
+    /**
+     * Method to filter and validate JWT token in incoming requests.
+     *
+     * @param request     The incoming HTTP servlet request.
+     * @param response    The HTTP servlet response.
+     * @param filterChain The filter chain.
+     * @throws ServletException If a servlet-related error occurs.
+     * @throws IOException      If an I/O error occurs.
+     */
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
                                     @NonNull HttpServletResponse response,

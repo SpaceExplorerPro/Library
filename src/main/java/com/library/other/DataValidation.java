@@ -5,8 +5,17 @@ import com.library.entities.User;
 import com.library.exceptions.InvalidBookDataException;
 import com.library.exceptions.RegistrationException;
 
+/**
+ * Class for data validation methods related to users and books.
+ */
 public class DataValidation {
 
+    /**
+     * Validates user data.
+     *
+     * @param user The user to validate.
+     * @throws RegistrationException if any of the user's fields are null or blank.
+     */
     public static void validateUser(User user) {
         if (user.getUsername() == null || user.getUsername().isBlank())
             throw new RegistrationException("Username cannot be null or blank");
@@ -21,6 +30,12 @@ public class DataValidation {
             throw new RegistrationException("Full name cannot be null or blank");
     }
 
+    /**
+     * Validates book data.
+     *
+     * @param book The book to validate.
+     * @throws InvalidBookDataException if any of the book's fields are null or blank.
+     */
     public static void validateBook(Book book) {
         if (book.getIsbn() == null || book.getIsbn().isBlank())
             throw new InvalidBookDataException("ISBN cannot be null or blank");
