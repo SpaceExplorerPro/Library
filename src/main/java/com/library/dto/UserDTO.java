@@ -8,6 +8,7 @@ public class UserDTO {
     private String username;
     private Role role;
     private String email;
+    private String fullName;
 
     public int getId() {
         return id;
@@ -39,5 +40,13 @@ public class UserDTO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 }

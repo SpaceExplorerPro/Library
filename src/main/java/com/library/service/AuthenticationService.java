@@ -1,5 +1,6 @@
 package com.library.service;
 
+import com.library.exceptions.ElementAlreadyExistsException;
 import com.library.other.DataValidation;
 import com.library.entities.User;
 import com.library.repositories.UserRepository;
@@ -25,6 +26,8 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse register(User request) {
+        if (userRepository.findByUsername(request.getUsername()).isPresent())
+            throw new ElementAlreadyExistsException("User already exists");
         validateRegistration(request);
         request.setPassword(passwordEncoder.encode(request.getPassword()));
         userRepository.save(request);
@@ -32,18 +35,10 @@ public class AuthenticationService {
         String token = jwtService.generateToken(request);
 
         return new AuthenticationResponse(token);
-
-//        User user = new User();
-//        user.setFullName(request.getFullName());
-//        user.setUsername(request.getUsername());
-//        user.setPassword(passwordEncoder.encode(request.getPassword()));
-//        user.setRole(request.getRole());
-//        user.setEmail(request.getEmail());
-//        user.setLoans(request.getLoans());
     }
 
     private void validateRegistration(User request) {
-        DataValidation.validateUser(request, userRepository);
+        DataValidation.validateUser(request);
     }
 
     public AuthenticationResponse authenticate(User request) {

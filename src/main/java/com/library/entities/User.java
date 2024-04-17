@@ -25,8 +25,6 @@ public class User implements UserDetails {
     private String email;
     @Column(nullable = false)
     private String fullName;
-    @OneToMany(mappedBy = "user")
-    private List<Loan> loans;
 
     public int getId() {return id;}
 
@@ -74,14 +72,6 @@ public class User implements UserDetails {
         this.fullName = fullName;
     }
 
-    public List<Loan> getLoans() {
-        return loans;
-    }
-
-    public void setLoans(List<Loan> loans) {
-        this.loans = loans;
-    }
-
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -105,5 +95,18 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id == user.id &&
+                username.equals(user.username) &&
+                password.equals(user.password) &&
+                role == user.role &&
+                email.equals(user.email) &&
+                fullName.equals(user.fullName);
     }
 }

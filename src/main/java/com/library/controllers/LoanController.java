@@ -4,9 +4,9 @@ package com.library.controllers;
 import com.library.dto.LoanDTO;
 import com.library.entities.Loan;
 import com.library.service.LoanService;
-import jakarta.persistence.PostUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,9 +27,15 @@ public class LoanController {
         return loanService.loanBook(loan);
     }
 
-    @PostMapping("/return")
-    public @ResponseBody Loan returnBook(@RequestBody Loan loan) {
-        return loanService.returnBook(loan);
+    @PatchMapping("/update/{id}")
+    public @ResponseBody Loan returnBook(@PathVariable Integer id) {
+        return loanService.returnBook(id);
+    }
+
+    @GetMapping("/my-loans")
+    public List<LoanDTO> getLoansOfUser() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return loanService.getLoansOfUser(username);
     }
 
     @GetMapping("/getAll")

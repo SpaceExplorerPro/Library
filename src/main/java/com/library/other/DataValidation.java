@@ -3,17 +3,11 @@ package com.library.other;
 import com.library.entities.Book;
 import com.library.entities.User;
 import com.library.exceptions.InvalidBookDataException;
-import com.library.repositories.BookRepository;
-import com.library.repositories.UserRepository;
-import com.library.exceptions.ElementAlreadyExistsException;
 import com.library.exceptions.RegistrationException;
 
 public class DataValidation {
 
-    public static void validateUser(User user, UserRepository userRepository) {
-        if (userRepository.findByUsername(user.getUsername()).isPresent())
-            throw new ElementAlreadyExistsException("User already exists");
-
+    public static void validateUser(User user) {
         if (user.getUsername() == null || user.getUsername().isBlank())
             throw new RegistrationException("Username cannot be null or blank");
 
@@ -27,10 +21,7 @@ public class DataValidation {
             throw new RegistrationException("Full name cannot be null or blank");
     }
 
-    public static void validateBook(Book book, BookRepository bookRepository) {
-        if (bookRepository.findByIsbn(book.getIsbn()).isPresent())
-            throw new ElementAlreadyExistsException("Book already exists");
-
+    public static void validateBook(Book book) {
         if (book.getIsbn() == null || book.getIsbn().isBlank())
             throw new InvalidBookDataException("ISBN cannot be null or blank");
 

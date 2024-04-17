@@ -31,6 +31,16 @@ public class BookController {
         bookService.deleteBook(id);
     }
 
+    @PatchMapping("/update/{id}")
+    public @ResponseBody Book updateBook(@PathVariable Integer id, @RequestBody Book updatedBook) {
+        return bookService.updateBook(id, updatedBook);
+    }
+
+    @GetMapping("/search")
+    public List<BookDTO> searchBooksByExample(@RequestBody Book exampleBook) {
+        return bookService.findBooksByExample(exampleBook);
+    }
+
     @GetMapping("/getAll")
     public List<BookDTO> getAllBooks() {
         return bookService.getAllBooks();

@@ -38,8 +38,8 @@ public class SecurityConfig {
             .authorizeHttpRequests(
                     request -> request.requestMatchers("/login/**", "/register/**")
                             .permitAll()
-                            .requestMatchers("/user/**", "/book/**").hasAuthority("ADMIN")
-                            .requestMatchers("loan/**").hasAuthority("USER")
+                            .requestMatchers("/user/**", "/book/add", "book/delete/{id}", "book/update/{id}",
+                                    "/loan/add", "/loan/update/{id}", "/loan/getAll").hasAuthority("ADMIN")
                             .anyRequest()
                             .authenticated()
             ).userDetailsService(userDetailsService)

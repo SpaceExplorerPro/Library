@@ -2,8 +2,6 @@ package com.library.entities;
 
 import jakarta.persistence.*;
 
-import java.util.List;
-
 @Entity
 public class Book {
 
@@ -22,8 +20,6 @@ public class Book {
     private Integer publishYear;
     @Column(nullable = false)
     private Integer availableCopies;
-    @OneToMany(mappedBy = "book")
-    private List<Loan> loans;
 
     public Integer getId() {
         return id;
@@ -81,11 +77,17 @@ public class Book {
         this.availableCopies = availableCopies;
     }
 
-    public List<Loan> getLoans() {
-        return loans;
-    }
-
-    public void setLoans(List<Loan> loans) {
-        this.loans = loans;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Book book = (Book) o;
+        return id.equals(book.id) &&
+                isbn.equals(book.isbn) &&
+                title.equals(book.title) &&
+                author.equals(book.author) &&
+                publisher.equals(book.publisher) &&
+                publishYear.equals(book.publishYear) &&
+                availableCopies.equals(book.availableCopies);
     }
 }
